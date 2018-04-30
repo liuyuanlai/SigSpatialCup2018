@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include "buildgraph.h"
 
 using namespace std;
 

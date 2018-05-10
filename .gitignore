@@ -1,4 +1,7 @@
 *.o
 *.out
 .DS_Store
-
+cmake-build-debug
+CMakeLists.txt
+.idea/
+.gdbinit

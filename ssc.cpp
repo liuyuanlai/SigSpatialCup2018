@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include <tuple>
 #include <ctime>
 #include <string>
@@ -10,14 +9,15 @@
 using namespace std;
 namespace pt = boost::property_tree;
 
+typedef boost::property<boost::vertex_name_t, std::string> VertexProperty;
+typedef boost::property<boost::edge_name_t, std::string> EdgeProperty;
+typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VertexProperty, EdgeProperty> UndirectedGraph;
+typedef typename boost::graph_traits<UndirectedGraph>::vertex_descriptor Vertex;
+typedef boost::property_map<UndirectedGraph, boost::vertex_index_t>::type IndexMap;
 
 
 int main() {
-    typedef boost::property<boost::vertex_name_t, std::string> VertexProperty;
-    typedef boost::property<boost::edge_name_t, std::string> EdgeProperty;
-    typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VertexProperty, EdgeProperty> UndirectedGraph;
-    typedef typename boost::graph_traits<UndirectedGraph>::vertex_descriptor Vertex;
-    typedef boost::property_map<UndirectedGraph, boost::vertex_index_t>::type IndexMap;
+    
 	pt::ptree root;
 	//pt::read_json("SampleDataset1/EsriNapervilleElectricNetwork.json", root);
     pt::read_json("SampleDataset1/SampleDataset1.json", root);
@@ -40,7 +40,7 @@ int main() {
 
 	for(int i = 0; i < numVertices; i++)
     {
-	    boost::put(boost::vertex_name_t(), g, i, vecVertices[i]); // set the property of a vertex
+	    boost::put(boost::vertex_name, g, i, vecVertices[i]); // set the property of a vertex
 	    indexes[vecVertices[i]] = boost::vertex(i, g);     // retrives the associated vertex descriptor
     }
     cout << "Add vertex!!!!" << endl;
@@ -52,10 +52,13 @@ int main() {
     Vertex start = vertex(13, g);
     Vertex end = vertex(2, g);
     vector<string> vec;
-    boost::property_map<UndirectedGraph, boost::vertex_name_t>::type name = get(boost::vertex_name_t(), g);
+    boost::property_map<UndirectedGraph, boost::vertex_name_t>::type name = get(boost::vertex_name, g);
+
     FindPath path(g);
+
     clock_t start_t = clock();
     path.pathFinding(start, end, g, name[start], visitedNode, vec);
+
     clock_t end_t = clock();
     cout << "execution time: " << (double) (end_t-start_t)/CLOCKS_PER_SEC << endl;
     string in_path;
@@ -73,6 +76,7 @@ int main() {
     for(auto itr = result.begin(); itr != result.end(); ++itr){
         cout << (*itr) << endl;
     }
+
 
 
 	//vector<string> :: iterator itr;

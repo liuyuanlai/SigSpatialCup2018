@@ -27,6 +27,7 @@ int main() {
     FindPath path(g, buildGraph.descIndexVertices, start, end);
 
     clock_t start_t = clock();
+    cout << buildGraph.descIndexVertices[start] << endl;
     path.pathFinding(start, buildGraph.descIndexVertices[start], visitedNode, vec);
 
     clock_t end_t = clock();

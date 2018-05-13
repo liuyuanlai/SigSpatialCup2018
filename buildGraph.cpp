@@ -34,6 +34,9 @@ BuildGraph::BuildGraph(string file) {
     for(int i = 0; i < vecEdge.size(); i++)
   	{
     	boost::add_edge(strIndexVertices[get<0>(vecEdge[i])], strIndexVertices[get<1>(vecEdge[i])], EdgeProperty(get<2>(vecEdge[i])), g);
+    	cout << get<0>(vecEdge[i]) << endl;
+    	cout << get<1>(vecEdge[i]) << endl;
+    	cout << get<2>(vecEdge[i]) << endl << endl;
     	//cout << "edge:" << vecStrEdge[i] << endl;
     	//boost::add_edge(strIndexVertices[vecEdge[i].first], strIndexVertices[vecEdge[i].second], EdgeProperty(vecStrEdge[i]), g);
 

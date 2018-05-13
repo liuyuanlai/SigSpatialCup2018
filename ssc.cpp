@@ -16,9 +16,14 @@ int main() {
 
     UndirectedGraph g = buildGraph.g;
 
+    string startstr = "{7FC28536-6F4A-4A9A-B439-1D87AE2D8871}";
+    string endstr = "{5F396092-90DD-4E07-8C7D-2FB8480771C1}";
 
-    Vertex start = vertex(13, g);
-    Vertex end = vertex(2, g);
+    // Vertex start = vertex(13, g);
+    // Vertex end = vertex(2, g);
+    Vertex start = buildGraph.strIndexVertices[startstr];
+    Vertex end = buildGraph.strIndexVertices[endstr];
+
     vector<string> vec;
     unordered_set<Vertex> visitedNode; 
 

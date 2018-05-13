@@ -25,7 +25,7 @@ class BuildGraph {
 	public:
 		UndirectedGraph g;
 		vector<Edge> vecEdge;
-		//vector<string> vecStrEdge;
+		vector<string> vecStrEdge;
 		vector<string> vecVertices;
 		unordered_set<string> setVertices;
 		map<string, UndirectedGraph::vertex_descriptor> strIndexVertices;

@@ -10,7 +10,7 @@ BuildGraph::BuildGraph(string file) {
 
     for (pt::ptree::value_type &row : root.get_child("rows")) {
 		vecEdge.push_back(Edge(row.second.get<string>("fromGlobalId"), row.second.get<string>("toGlobalId"), row.second.get<string>("viaGlobalId")));
-		//vecStrEdge.push_back(row.second.get<string>("viaGlobalId"));
+		vecStrEdge.push_back(row.second.get<string>("viaGlobalId"));
 		setVertices.insert(row.second.get<string>("fromGlobalId"));
 		setVertices.insert(row.second.get<string>("toGlobalId"));
 	}

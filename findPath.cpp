@@ -7,7 +7,7 @@ FindPath::FindPath (UndirectedGraph g, desc2strMap descIndexVertices, Vertex sta
     this->g = g;
     this->descIndexVertices = descIndexVertices;
     Ename = get(boost::edge_name, g);
-    index = get(boost::vertex_index, g);
+    //index = get(boost::vertex_index, g);
     this->start = start;
     this->end = end;
     // Vname = get(boost::vertex_name, g);
@@ -37,7 +37,7 @@ void FindPath::pathFinding(Vertex start, string currentPath, unordered_set<Verte
         string tempPath = currentPath + ">" + Ename[*out_i] + ">" + descIndexVertices[targ];
         //cout << Vname[targ] << endl;
         //cout << tempPath << endl;
-        if(index[targ] == index[end]) {
+        if(targ == end) {
             res.push_back(tempPath);
             //cout << tempPath << endl;
         }

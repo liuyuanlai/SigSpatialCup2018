@@ -35,30 +35,36 @@
 using namespace std;
 
 FindPath::FindPath (UndirectedGraph g) {
-    //Vname = get(boost::vertex_name, g);
-    // for(int i = 0; i < 17; i++) {
-    //     Vertex node = vertex(i, g);
-    //     cout << "node" + to_string(i) + ": " << Vname[node] << endl;
-    // }
+    
+    this->g = g;
     Ename = get(boost::edge_name, g);
     index = get(boost::vertex_index, g);
     Vname = get(boost::vertex_name, g);
+    for(int i = 0; i < 17; i++) {
+        Vertex node = vertex(i, g);
+        cout << "node" + to_string(i) + ": " << Vname[node] << endl;
+    }
 }
 
 FindPath::~FindPath() {
 
 }
 
-void FindPath::pathFinding(Vertex start, Vertex end, UndirectedGraph g, string currentPath, unordered_set<Vertex> visitedNode, vector<string> &res){
+void FindPath::pathFinding(int times, Vertex start, Vertex end, string currentPath, unordered_set<Vertex> visitedNode, vector<string> &res){
     typename GraphTraits::out_edge_iterator out_i, out_end;
     typename GraphTraits::edge_descriptor e;
-    boost::property_map<UndirectedGraph, boost::vertex_name_t>::type Vname_1 = get(boost::vertex_name, g);
+    //boost::property_map<UndirectedGraph, boost::vertex_name_t>::type Vname = get(boost::vertex_name, g);
+    // for(int i = 0; i < 17; i++) {
+    //     Vertex node = vertex(i, g);
+    //     if (Vname[node] != Vname_1[node]) {
+    //         cout << "vname:node" + to_string(i) + ": " << Vname[node] << endl;
+    //         cout << "vname_1:node" + to_string(i) + ": " << Vname_1[node] << endl;
+    //     }
+    // }
+    cout << "times:" << times <<endl;
     for(int i = 0; i < 17; i++) {
         Vertex node = vertex(i, g);
-        if (Vname[node] != Vname_1[node]) {
-            cout << "vname:node" + to_string(i) + ": " << Vname[node] << endl;
-            cout << "vname_1:node" + to_string(i) + ": " << Vname_1[node] << endl;
-        }
+        cout << "node" + to_string(i) + ": " << Vname[node] << endl;
     }
     //Vname = get(boost::vertex_name, g);
     //boost::property_map<UndirectedGraph, boost::edge_name_t>::type Ename = get(boost::edge_name, g);
@@ -79,7 +85,7 @@ void FindPath::pathFinding(Vertex start, Vertex end, UndirectedGraph g, string c
             res.push_back(tempPath);
             //cout << tempPath << endl;
         }
-        pathFinding(targ, end, g, tempPath, visitedNode, res);
+        this->pathFinding(times+1, targ, end, tempPath, visitedNode, res);
     }
 }
 

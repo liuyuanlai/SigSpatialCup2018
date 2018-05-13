@@ -9,13 +9,6 @@
 using namespace std;
 namespace pt = boost::property_tree;
 
-typedef boost::property<boost::vertex_name_t, std::string> VertexProperty;
-typedef boost::property<boost::edge_name_t, std::string> EdgeProperty;
-typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VertexProperty, EdgeProperty> UndirectedGraph;
-typedef typename boost::graph_traits<UndirectedGraph>::vertex_descriptor Vertex;
-typedef boost::property_map<UndirectedGraph, boost::vertex_index_t>::type IndexMap;
-
-
 int main() {
     
 	pt::ptree root;
@@ -57,7 +50,7 @@ int main() {
     FindPath path(g);
 
     clock_t start_t = clock();
-    path.pathFinding(start, end, g, name[start], visitedNode, vec);
+    path.pathFinding(0, start, end, name[start], visitedNode, vec);
 
     clock_t end_t = clock();
     cout << "execution time: " << (double) (end_t-start_t)/CLOCKS_PER_SEC << endl;

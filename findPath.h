@@ -25,7 +25,7 @@ class FindPath {
 
         //boost::property_map<UndirectedGraph, boost::vertex_name_t>::type Vname;
         boost::property_map<UndirectedGraph, boost::edge_name_t>::type Ename;
-        //IndexMap index;
+        IndexMap index;
         UndirectedGraph g;
         map<UndirectedGraph::vertex_descriptor, string> descIndexVertices;
         Vertex start;

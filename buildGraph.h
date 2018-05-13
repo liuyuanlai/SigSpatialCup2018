@@ -1,6 +1,7 @@
 #include <iostream>
 #include <utility>
 #include <tuple>
+#include <unordered_set>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/graph/graph_traits.hpp>
@@ -24,7 +25,7 @@ class BuildGraph {
 	public:
 		UndirectedGraph g;
 		vector<Edge> vecEdge;
-		vector<string> vecStrEdge;
+		//vector<string> vecStrEdge;
 		vector<string> vecVertices;
 		unordered_set<string> setVertices;
 		map<string, UndirectedGraph::vertex_descriptor> strIndexVertices;

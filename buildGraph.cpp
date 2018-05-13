@@ -1,0 +1,46 @@
+#include "buildGraph.h"
+
+using namespace std;
+namespace pt = boost::property_tree;
+
+BuildGraph::BuildGraph(string file) {
+	pt::ptree root;
+	pt::read_json(file, root);
+	cout << "Read file completed!!!!!!" << endl;
+
+    for (pt::ptree::value_type &row : root.get_child("rows")) {
+		vecEdge.push_back(Edge(row.second.get<string>("fromGlobalId"), row.second.get<string>("toGlobalId"), row.second.get<string>("viaGlobalId")));
+		vecStrEdge.push_back(row.second.get<string>("viaGlobalId"));
+		setVertices.insert(row.second.get<string>("fromGlobalId"));
+		setVertices.insert(row.second.get<string>("toGlobalId"));
+	}
+	cout << "Parse file completed!!!!!!" << endl;
+
+	numVertices = setVertices.size();
+	g = UndirectedGraph(numVertices);
+	vecVertices.insert(vecVertices.end(), setVertices.begin(), setVertices.end());
+
+	for(int i = 0; i < numVertices; i++)
+    {
+	    //boost::put(boost::vertex_name, g, i, vecVertices[i]); // set the property of a vertex
+	    boost::add_vertex(g);
+	    strIndexVertices[vecVertices[i]] = i;     // retrives the associated vertex descriptor
+	    //cout <<  strIndexVertices[vecVertices[i]] << endl;
+	    //cout << boost::vertex(i, g) << endl;
+	    descIndexVertices[i] = vecVertices[i];
+    }
+    cout << "Add vertices completed!!!!" << endl;
+
+    for(int i = 0; i < vecEdge.size(); i++)
+  	{
+    	boost::add_edge(strIndexVertices[get<0>(vecEdge[i])], strIndexVertices[get<1>(vecEdge[i])], EdgeProperty(get<2>(vecEdge[i])), g);
+    	//cout << "edge:" << vecStrEdge[i] << endl;
+    	//boost::add_edge(strIndexVertices[vecEdge[i].first], strIndexVertices[vecEdge[i].second], EdgeProperty(vecStrEdge[i]), g);
+
+  	}
+    cout << "Add edges completed!!!!" << endl;
+};
+
+UndirectedGraph BuildGraph::getGraph () {
+	return g;
+}

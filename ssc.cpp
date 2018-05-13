@@ -5,52 +5,29 @@
 #include <vector>
 
 #include "findPath.h"
+#include "buildGraph.h"
 
 using namespace std;
 namespace pt = boost::property_tree;
 
 int main() {
-    
-	pt::ptree root;
-	//pt::read_json("SampleDataset1/EsriNapervilleElectricNetwork.json", root);
-    pt::read_json("SampleDataset1/SampleDataset1.json", root);
-    typedef tuple<string, string, string> Edge;
-    unordered_set<Vertex> visitedNode; 
-	vector<Edge> vecEdge;
-	vector<string> vecVertices;
-	unordered_set<string> verticesSet;
-	map<string, UndirectedGraph::vertex_descriptor> indexes;
-    cout << "Read file!!!!!!" << endl;
-	for (pt::ptree::value_type &row : root.get_child("rows")) {
-		vecEdge.push_back(Edge(row.second.get<string>("fromGlobalId"),row.second.get<string>("toGlobalId"), row.second.get<string>("viaGlobalId")));
-		verticesSet.insert(row.second.get<string>("fromGlobalId"));
-		verticesSet.insert(row.second.get<string>("toGlobalId"));
-	}
-    cout << "Insert node!!!!!!" << endl;
-	int numVertices = verticesSet.size();
-	UndirectedGraph g(numVertices);
-	vecVertices.insert(vecVertices.end(), verticesSet.begin(), verticesSet.end());//???????
+    string filepath = "SampleDataset1/SampleDataset1.json";
+    BuildGraph buildGraph = BuildGraph(filepath);
 
-	for(int i = 0; i < numVertices; i++)
-    {
-	    boost::put(boost::vertex_name, g, i, vecVertices[i]); // set the property of a vertex
-	    indexes[vecVertices[i]] = boost::vertex(i, g);     // retrives the associated vertex descriptor
-    }
-    cout << "Add vertex!!!!" << endl;
-    for(int i = 0; i < vecEdge.size(); i++)
-  	{
-    	boost::add_edge(indexes[get<0>(vecEdge[i])], indexes[get<1>(vecEdge[i])], EdgeProperty(get<2>(vecEdge[i])), g);
-  	}
-    cout << "Add edges!!!!" << endl;
+    UndirectedGraph g = buildGraph.g;
+
+
     Vertex start = vertex(13, g);
     Vertex end = vertex(2, g);
     vector<string> vec;
-    boost::property_map<UndirectedGraph, boost::vertex_name_t>::type name = get(boost::vertex_name, g);
+    unordered_set<Vertex> visitedNode; 
 
-    FindPath path(g);
+    //boost::property_map<UndirectedGraph, boost::vertex_name_t>::type name = get(boost::vertex_name, g);
+
+    FindPath path(g, buildGraph.descIndexVertices, start, end);
 
     clock_t start_t = clock();
-    path.pathFinding(0, start, end, name[start], visitedNode, vec);
+    path.pathFinding(start, buildGraph.descIndexVertices[start], visitedNode, vec);
 
     clock_t end_t = clock();
     cout << "execution time: " << (double) (end_t-start_t)/CLOCKS_PER_SEC << endl;
@@ -60,7 +37,7 @@ int main() {
         in_path = vec[k];
         std::vector<std::string> m_currentPath;  
         boost::algorithm::split(m_currentPath, in_path, boost::algorithm::is_any_of(">"));  
-        for(size_t i = 0;i<m_currentPath.size();i++)  
+        for(size_t i = 0; i<m_currentPath.size(); i++)  
         {  
             result.insert(m_currentPath[i]);  
         }  

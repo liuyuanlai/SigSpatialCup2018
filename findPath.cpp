@@ -2,11 +2,12 @@
 
 using namespace std;
 
-FindPath::FindPath (UndirectedGraph g, desc2strMap descIndexVertices, Vertex start, Vertex end) {
+FindPath::FindPath (UndirectedGraph g, vector<string> vecStrEdge, desc2strMap descIndexVertices, Vertex start, Vertex end) {
     
     this->g = g;
     this->descIndexVertices = descIndexVertices;
-    Ename = get(boost::edge_name, g);
+    this->vecStrEdge = vecStrEdge;
+    Ename = get(boost::edge_index, g);
     //index = get(boost::vertex_index, g);
     this->start = start;
     this->end = end;
@@ -19,7 +20,7 @@ FindPath::FindPath (UndirectedGraph g, desc2strMap descIndexVertices, Vertex sta
 
 
 
-void FindPath::pathFinding(Vertex start, string currentPath, unordered_set<Vertex> visitedNode, vector<string> &res){
+void FindPath::pathFinding(Vertex start, string currentVertexPath, string currentEdgePath, unordered_set<Vertex> visitedNode, vector<string> &vertexRes, vector<string> &edgeRes){
     typename GraphTraits::out_edge_iterator out_i, out_end;
     typename GraphTraits::edge_descriptor e;
     //boost::property_map<UndirectedGraph, boost::vertex_name_t>::type Vname = get(boost::vertex_name, g);
@@ -34,14 +35,21 @@ void FindPath::pathFinding(Vertex start, string currentPath, unordered_set<Verte
         //cout << Vname[targ] << endl;
         if(visitedNode.find(targ) != visitedNode.end()) {continue;}
         //string tempPath = currentPath + "->" + to_string(index[targ]); //name[targ];
-        string tempPath = currentPath + ">" + Ename[*out_i] + ">" + descIndexVertices[targ];
+        //string tempPath = currentPath + ">" + vecStrEdge[Ename[*out_i]] + ">" + descIndexVertices[targ];
+        string tempVertexPath = currentVertexPath + ">" + to_string(targ);
+        cout << "Current path: " << tempVertexPath << endl;
+        //cout << to_string(targ) << endl;
+        string tempEdgePath = currentEdgePath + ">" + to_string(Ename[*out_i]);
+        //cout << Ename[*out_i] << endl;
         //cout << Vname[targ] << endl;
         //cout << tempPath << endl;
         if(targ == end) {
-            res.push_back(tempPath);
+            vertexRes.push_back(tempVertexPath);
+            cout << "Find one path: " << tempVertexPath << endl;
+            edgeRes.push_back(tempEdgePath);
             //cout << tempPath << endl;
         }
-        this->pathFinding(targ, tempPath, visitedNode, res);
+        this->pathFinding(targ, tempVertexPath, tempEdgePath, visitedNode, vertexRes, edgeRes);
     }
 }
 

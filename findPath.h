@@ -10,8 +10,8 @@
 using namespace std;
 
 //typedef boost::property<boost::vertex_name_t, std::string> VertexProperty;
-typedef boost::property<boost::edge_name_t, std::string> EdgeProperty;
-//typedef boost::property<boost::edge_index_t, std::size_t> EdgeProperty;
+//typedef boost::property<boost::edge_name_t, std::string> EdgeProperty;
+typedef boost::property<boost::edge_index_t, std::size_t> EdgeProperty;
 typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, EdgeProperty> UndirectedGraph;
 typedef typename boost::graph_traits<UndirectedGraph>::vertex_descriptor Vertex;
 typedef boost::graph_traits<UndirectedGraph> GraphTraits;
@@ -24,16 +24,17 @@ class FindPath {
         // typedef typename boost::property_map<UndirectedGraph, boost::edge_name_t>::type typev;
 
         //boost::property_map<UndirectedGraph, boost::vertex_name_t>::type Vname;
-        boost::property_map<UndirectedGraph, boost::edge_name_t>::type Ename;
+        boost::property_map<UndirectedGraph, boost::edge_index_t>::type Ename;
         //IndexMap index;
         UndirectedGraph g;
-        map<UndirectedGraph::vertex_descriptor, string> descIndexVertices;
+        desc2strMap descIndexVertices;
+        vector<string> vecStrEdge;
         Vertex start;
         Vertex end;
     public:
     	FindPath(){};
     	//~FindPath();
-        FindPath (UndirectedGraph g, desc2strMap descIndexVertices, Vertex source, Vertex end);
-        void pathFinding(Vertex start, string currentPath, unordered_set<Vertex> visitedNode, vector<string> &res);
+        FindPath (UndirectedGraph g, vector<string> vecStrEdge, desc2strMap descIndexVertices, Vertex source, Vertex end);
+        void pathFinding(Vertex start, string currentVertexPath, string currentEdgePath, unordered_set<Vertex> visitedNode, vector<string> &vertexRes, vector<string> &edgeRes);
 
 };

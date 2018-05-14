@@ -11,7 +11,8 @@ using namespace std;
 namespace pt = boost::property_tree;
 
 int main() {
-    string filepath = "SampleDataset1/SampleDataset1.json";
+    //string filepath = "SampleDataset1/SampleDataset1.json";
+    string filepath = "EsriNapervilleElectricNetwork/EsriNapervilleElectricNetwork.json";
     BuildGraph buildGraph = BuildGraph(filepath);
 
     UndirectedGraph g = buildGraph.g;
@@ -24,28 +25,40 @@ int main() {
     Vertex start = buildGraph.strIndexVertices[startstr];
     Vertex end = buildGraph.strIndexVertices[endstr];
 
-    vector<string> vec;
+    vector<string> vertexRes;
+    vector<string> edgeRes;
     unordered_set<Vertex> visitedNode; 
 
     //boost::property_map<UndirectedGraph, boost::vertex_name_t>::type name = get(boost::vertex_name, g);
 
-    FindPath path(g, buildGraph.descIndexVertices, start, end);
+    FindPath path(g, buildGraph.vecStrEdge, buildGraph.descIndexVertices, start, end);
 
     clock_t start_t = clock();
-    cout << buildGraph.descIndexVertices[start] << endl;
-    path.pathFinding(start, buildGraph.descIndexVertices[start], visitedNode, vec);
+    //cout << buildGraph.descIndexVertices[start] << endl;
+    path.pathFinding(start, to_string(start), "", visitedNode, vertexRes, edgeRes);
 
     clock_t end_t = clock();
     cout << "execution time: " << (double) (end_t-start_t)/CLOCKS_PER_SEC << endl;
     string in_path;
     unordered_set<string> result;
-    for (size_t k = 0; k < vec.size(); k++){
-        in_path = vec[k];
+    for (size_t k = 0; k < vertexRes.size(); k++){
+        in_path = vertexRes[k];
         std::vector<std::string> m_currentPath;  
         boost::algorithm::split(m_currentPath, in_path, boost::algorithm::is_any_of(">"));  
-        for(size_t i = 0; i<m_currentPath.size(); i++)  
+        for(size_t i = 0; i < m_currentPath.size(); i++)  
         {  
-            result.insert(m_currentPath[i]);  
+            //cout << "vertexRes" << m_currentPath[i] << endl;
+            result.insert(buildGraph.vecVertices[stoi(m_currentPath[i])]);  
+        }  
+    }
+    for (size_t k = 0; k < edgeRes.size(); k++){
+        in_path = edgeRes[k];
+        std::vector<std::string> m_currentPath;  
+        boost::algorithm::split(m_currentPath, in_path, boost::algorithm::is_any_of(">"));  
+        for(size_t i = 1; i < m_currentPath.size(); i++)  
+        {  
+            //cout << "edgeRes" << m_currentPath[i] << endl;
+            result.insert(buildGraph.vecStrEdge[stoi(m_currentPath[i])]);  
         }  
     }
     cout << "Output: " << endl;

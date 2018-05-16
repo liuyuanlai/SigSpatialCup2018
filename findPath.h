@@ -5,22 +5,14 @@
 #include <boost/graph/depth_first_search.hpp>
 #include "boost/graph/graph_traits.hpp"
 #include "boost/graph/adjacency_list.hpp"
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/algorithm/string.hpp>
 #include <unordered_set>
-#include <boost/ptr_container/ptr_vector.hpp>
+
+
+#include "typedef.h"
 
 using namespace std;
-
-//typedef boost::property<boost::vertex_name_t, std::string> VertexProperty;
-//typedef boost::property<boost::edge_name_t, std::string> EdgeProperty;
-typedef boost::property<boost::edge_index_t, std::size_t> EdgeProperty;
-typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, EdgeProperty> UndirectedGraph;
-typedef typename boost::graph_traits<UndirectedGraph>::vertex_descriptor Vertex;
-typedef boost::graph_traits<UndirectedGraph> GraphTraits;
-typedef boost::property_map<UndirectedGraph, boost::vertex_index_t>::type IndexMap;
-typedef map<UndirectedGraph::vertex_descriptor, string> desc2strMap;
-typedef pair<string, string> VertexEdgePath;
-typedef map<int, VertexEdgePath> AllEdgePath;
 
 class FindPath {
 	private:

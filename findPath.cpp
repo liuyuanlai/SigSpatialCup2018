@@ -60,8 +60,8 @@ void FindPath::pathFindNoDup() {
     //     } 
 
     // }
-    cout << tmpVertexEdgePath.first << endl;
-    cout << tmpVertexEdgePath.second << endl;
+    // cout << tmpVertexEdgePath.first << endl;
+    // cout << tmpVertexEdgePath.second << endl;
     vector<string> vecPath;  
     boost::algorithm::split(vecPath, tmpVertexEdgePath.first, boost::algorithm::is_any_of(">"));  
     for(size_t i = 0; i < vecPath.size()-1; i++)  

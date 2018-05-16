@@ -8,13 +8,12 @@
 #include "buildGraph.h"
 
 using namespace std;
-namespace pt = boost::property_tree;
 
 int main() {
 
     // string filepath = "SampleDataset1/SampleDataset1.json";
     // string outputpath = "SampleDataset1/output.txt";
-    
+
     string filepath = "EsriNapervilleElectricNetwork/EsriNapervilleElectricNetwork.json";
     string outputpath = "EsriNapervilleElectricNetwork/output.txt";
 

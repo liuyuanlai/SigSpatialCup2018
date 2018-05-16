@@ -11,8 +11,10 @@ using namespace std;
 namespace pt = boost::property_tree;
 
 int main() {
-    //string filepath = "SampleDataset1/SampleDataset1.json";
-    string filepath = "EsriNapervilleElectricNetwork/EsriNapervilleElectricNetwork.json";
+    string filepath = "SampleDataset1/SampleDataset1.json";
+    string outputpath = "SampleDataset1/output.txt";
+    // string filepath = "EsriNapervilleElectricNetwork/EsriNapervilleElectricNetwork.json";
+    // string outputpath = "EsriNapervilleElectricNetwork/output.txt";
     BuildGraph buildGraph = BuildGraph(filepath);
 
     UndirectedGraph g = buildGraph.g;
@@ -20,79 +22,27 @@ int main() {
     string startstr = "{7FC28536-6F4A-4A9A-B439-1D87AE2D8871}";
     string endstr = "{5F396092-90DD-4E07-8C7D-2FB8480771C1}";
 
+    // string startstr = "{42236F76-4CEE-449E-82E7-94F96ABB88C4}";
+    // string endstr = "{1CAF7740-0BF4-4113-8DB2-654E18800028}";
+
     // Vertex start = vertex(13, g);
     // Vertex end = vertex(2, g);
     Vertex start = buildGraph.strIndexVertices[startstr];
     Vertex end = buildGraph.strIndexVertices[endstr];
 
-    vector<string> vertexRes;
-    vector<string> edgeRes;
-    unordered_set<Vertex> visitedNode; 
-
-    //boost::property_map<UndirectedGraph, boost::vertex_name_t>::type name = get(boost::vertex_name, g);
-
-    FindPath path(g, buildGraph.vecStrEdge, buildGraph.descIndexVertices, start, end);
+    FindPath path(g, buildGraph.pathStore, buildGraph.vecStrEdge, buildGraph.vecVertices, buildGraph.descIndexVertices, start, end);
 
     clock_t start_t = clock();
-    //cout << buildGraph.descIndexVertices[start] << endl;
-    path.pathFinding(start, to_string(start), "", visitedNode, vertexRes, edgeRes);
+
+    path.pathFindDup();//call pathfind algorithm
 
     clock_t end_t = clock();
     cout << "execution time: " << (double) (end_t-start_t)/CLOCKS_PER_SEC << endl;
-    string in_path;
-    unordered_set<string> result;
-    for (size_t k = 0; k < vertexRes.size(); k++){
-        in_path = vertexRes[k];
-        std::vector<std::string> m_currentPath;  
-        boost::algorithm::split(m_currentPath, in_path, boost::algorithm::is_any_of(">"));  
-        for(size_t i = 0; i < m_currentPath.size(); i++)  
-        {  
-            //cout << "vertexRes" << m_currentPath[i] << endl;
-            result.insert(buildGraph.vecVertices[stoi(m_currentPath[i])]);  
-        }  
-    }
-    for (size_t k = 0; k < edgeRes.size(); k++){
-        in_path = edgeRes[k];
-        std::vector<std::string> m_currentPath;  
-        boost::algorithm::split(m_currentPath, in_path, boost::algorithm::is_any_of(">"));  
-        for(size_t i = 1; i < m_currentPath.size(); i++)  
-        {  
-            //cout << "edgeRes" << m_currentPath[i] << endl;
-            result.insert(buildGraph.vecStrEdge[stoi(m_currentPath[i])]);  
-        }  
-    }
-    cout << "Output: " << endl;
-    for(auto itr = result.begin(); itr != result.end(); ++itr){
-        cout << (*itr) << endl;
-    }
 
+    if (path.checkResult(outputpath)) cout << "Correct result" << endl;
+    else cout << "Wrong result" << endl;
 
-
-	//vector<string> :: iterator itr;
-    //cout << "Original nodes ID:\n";
-    //for (itr = vecVertices.begin(); itr != vecVertices.end(); itr++)
-    //    cout << (*itr) << endl;
-
-    
-    //IndexMap index = get(boost::vertex_index, g);
-
-    //typedef boost::graph_traits<UndirectedGraph>::vertex_iterator vertex_iter;
-    //std::pair<vertex_iter, vertex_iter> vp;
-    //cout << "Vertices in the graph = ";
-    //for (vp = vertices(g); vp.first != vp.second; ++vp.first)
-    //        std::cout << index[*vp.first] << " ";
-    //std::cout << std::endl;
-
-    //std::cout << "edges(g) = ";
-    //boost::graph_traits<UndirectedGraph>::edge_iterator ei, ei_end;
-    //for (tie(ei, ei_end) = edges(g); ei != ei_end; ++ei)
-    //    std::cout << "(" << index[source(*ei, g)]<< "," << index[target(*ei, g)] << ") ";
-    //std::cout << std::endl;
-
-/*
-    //boost::graph_traits<UndirectedGraph>::vertex_descriptor start, end;
-    //typedef typename boost::graph_traits<UndirectedGraph>::vertex_descriptor Vertex;
-    */
-
+    //buildGraph.printEdge();
+    buildGraph.pathStore.clear();
 }
 

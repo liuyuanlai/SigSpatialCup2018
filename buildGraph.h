@@ -6,6 +6,8 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
+
 
 
 using namespace std;
@@ -19,6 +21,9 @@ typedef typename boost::graph_traits<UndirectedGraph>::vertex_descriptor Vertex;
 typedef boost::graph_traits<UndirectedGraph> GraphTraits;
 //typedef tuple<string, string, string> Edge;
 typedef pair<string, string> Edge;
+typedef pair<string, string> VertexEdgePath;
+typedef map<int, VertexEdgePath> AllEdgePath;
+
 
 
 class BuildGraph {
@@ -30,12 +35,15 @@ class BuildGraph {
 		unordered_set<string> setVertices;
 		map<string, UndirectedGraph::vertex_descriptor> strIndexVertices;
 		map<UndirectedGraph::vertex_descriptor, string> descIndexVertices;
+		//vector<map<int, string>> pathStore;
+		boost::ptr_vector<AllEdgePath> pathStore;
 		int numVertices;
 
 	public:
 		BuildGraph (){};
 		BuildGraph (string file);
 		UndirectedGraph getGraph();
+		void printEdge();
 
 
 };

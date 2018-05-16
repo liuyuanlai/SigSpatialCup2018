@@ -42,7 +42,8 @@ int main() {
 
     start_t = clock();
 
-    path.pathFindNoDup();//call pathfind algorithm
+    path.pathFindNoDup(); //call non-duplicate pathfind algorithm
+    //path.pathFindDup(); //call duplicate pathfind algorithm
 
     end_t = clock();
     cout << "Find path takes: " << (double) (end_t-start_t)/CLOCKS_PER_SEC <<  "s" << endl;

@@ -150,8 +150,8 @@ void FindPath::checkResult (string expectedFile) {
         s.erase(remove(s.begin(), s.end(), '\r'), s.end());
         expectedRes.insert(s);
     }
-    if (expectedRes == result) cout << "Correct result" << endl;
-    else cout << "Wrong result" << endl;
+    if (expectedRes == result) cout << "Result check passed..." << endl;
+    else cout << "Result check didn't pass..." << endl;
 }
 
 // FindPath::~FindPath() {

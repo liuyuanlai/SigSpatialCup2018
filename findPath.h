@@ -45,7 +45,7 @@ class FindPath {
     	FindPath(){};
     	//~FindPath();
         FindPath (UndirectedGraph g, boost::ptr_vector<AllEdgePath> pathStore, vector<string> vecStrEdge, vector<string> vecVertices, desc2strMap descIndexVertices, Vertex start, Vertex end);
-        bool checkResult(string expectedfile);
+        void checkResult(string expectedfile);
         void pathFindDup();
         void pathFindNoDup();
         void pathFindingDup(Vertex start, string currentVertexPath, string currentEdgePath, unordered_set<Vertex> visitedNode);

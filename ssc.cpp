@@ -25,8 +25,6 @@ int main() {
     // string startstr = "{42236F76-4CEE-449E-82E7-94F96ABB88C4}";
     // string endstr = "{1CAF7740-0BF4-4113-8DB2-654E18800028}";
 
-    // Vertex start = vertex(13, g);
-    // Vertex end = vertex(2, g);
     Vertex start = buildGraph.strIndexVertices[startstr];
     Vertex end = buildGraph.strIndexVertices[endstr];
 
@@ -34,13 +32,12 @@ int main() {
 
     clock_t start_t = clock();
 
-    path.pathFindDup();//call pathfind algorithm
+    path.pathFindNoDup();//call pathfind algorithm
 
     clock_t end_t = clock();
     cout << "execution time: " << (double) (end_t-start_t)/CLOCKS_PER_SEC << endl;
 
-    if (path.checkResult(outputpath)) cout << "Correct result" << endl;
-    else cout << "Wrong result" << endl;
+    path.checkResult(outputpath);
 
     //buildGraph.printEdge();
     buildGraph.pathStore.clear();

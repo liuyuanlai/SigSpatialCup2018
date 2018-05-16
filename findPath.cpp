@@ -22,7 +22,7 @@ void FindPath::pathFindDup() {
     //unordered_set<string> result;
     for (size_t k = 0; k < vertexRes.size(); k++){
         in_path = vertexRes[k];
-        std::vector<std::string> m_currentPath;  
+        vector<string> m_currentPath;  
         boost::algorithm::split(m_currentPath, in_path, boost::algorithm::is_any_of(">"));  
         for(size_t i = 0; i < m_currentPath.size(); i++)  
         {  
@@ -49,7 +49,31 @@ void FindPath::pathFindDup() {
 void FindPath::pathFindNoDup() {
     unordered_set<Vertex> visitedNode;
     VertexEdgePath tmpVertexEdgePath = this->pathFindingNoDup(start, visitedNode);
+
+    // for (int v = 0; v < vecVertices.size(); v++) {
+    //     typename GraphTraits::out_edge_iterator out_i, out_end;
+    //     typename GraphTraits::edge_descriptor e;
+    //     for (tie(out_i, out_end) = out_edges(v, g); out_i != out_end; ++out_i) {
+    //         e = *out_i;
+    //         Vertex targ = target(e, g);
+    //         cout << v << ">" << targ << ": " << pathStore[v][targ].second << endl;
+    //     } 
+
+    // }
     cout << tmpVertexEdgePath.first << endl;
+    cout << tmpVertexEdgePath.second << endl;
+    vector<string> vecPath;  
+    boost::algorithm::split(vecPath, tmpVertexEdgePath.first, boost::algorithm::is_any_of(">"));  
+    for(size_t i = 0; i < vecPath.size()-1; i++)  
+    {  
+        result.insert(vecVertices[stoi(vecPath[i])]);  
+    }
+    boost::algorithm::split(vecPath, tmpVertexEdgePath.second, boost::algorithm::is_any_of(">"));  
+    for(size_t i = 0; i < vecPath.size() - 1; i++)  
+    {  
+        //cout << "edgeRes" << m_currentPath[i] << endl;
+        result.insert(vecStrEdge[stoi(vecPath[i])]);  
+    } 
 
 }
 
@@ -64,6 +88,7 @@ void FindPath::pathFindingDup (Vertex start, string currentVertexPath, string cu
     { 
         e = *out_i;
         Vertex src = source(e, g), targ = target(e, g);
+
         if(visitedNode.find(targ) != visitedNode.end()) {continue;}        
         //string tempPath = currentPath + ">" + vecStrEdge[Ename[*out_i]] + ">" + descIndexVertices[targ];
         string tempVertexPath = currentVertexPath + ">" + to_string(targ);
@@ -82,36 +107,41 @@ void FindPath::pathFindingDup (Vertex start, string currentVertexPath, string cu
 VertexEdgePath FindPath::pathFindingNoDup (Vertex start, unordered_set<Vertex> visitedNode) {
     typename GraphTraits::out_edge_iterator out_i, out_end;
     typename GraphTraits::edge_descriptor e;
-    //boost::property_map<UndirectedGraph, boost::vertex_name_t>::type Vname = get(boost::vertex_name, g);
 
     visitedNode.insert(start);
-    if (start == end) return VertexEdgePath(to_string(start), to_string(Ename[*out_i]));
+    if (start == end) return VertexEdgePath(to_string(start) + ">", "");
     string tempVertexPath = "", tempEdgePath = "";
     
     for (tie(out_i, out_end) = out_edges(start, g); out_i != out_end; ++out_i) 
     { 
         e = *out_i;
-        //Vertex src = source(e, g), targ = target(e, g);
         Vertex targ = target(e, g);
+
         if (visitedNode.find(targ) != visitedNode.end()) {continue;}
 
-        if (pathStore[start][targ].first != "null") {
-            tempVertexPath += ">" + pathStore[start][targ].first;
-            tempEdgePath += ">" + pathStore[start][targ].second;
-        }
-        else {
+        if (pathStore[start][targ].first == "null") {
             VertexEdgePath tmpVertexEdgePath = this->pathFindingNoDup(targ, visitedNode);
             pathStore[start][targ].first = tmpVertexEdgePath.first;
             pathStore[start][targ].second = tmpVertexEdgePath.second;
-            tempVertexPath += ">" + pathStore[start][targ].first;
-            tempEdgePath += ">" + pathStore[start][targ].second;
+            if (tmpVertexEdgePath.first != "dead") {
+                tempVertexPath += to_string(start) + ">" + pathStore[start][targ].first;
 
+                pathStore[start][targ].second = to_string(Ename[e]) + ">" + pathStore[start][targ].second;
+                tempEdgePath += pathStore[start][targ].second;
+            }
+            
+        }
+        else if (pathStore[start][targ].first == "dead") {continue;}
+        else {
+            tempVertexPath += to_string(start) + ">" + pathStore[start][targ].first;
+            tempEdgePath += pathStore[start][targ].second;
         }
     }
-    return VertexEdgePath(tempVertexPath, tempEdgePath);
+    if (tempVertexPath == "") return VertexEdgePath("dead", "dead");
+    else return VertexEdgePath(tempVertexPath, tempEdgePath);
 }
 
-bool FindPath::checkResult (string expectedFile) {
+void FindPath::checkResult (string expectedFile) {
     unordered_set<string> expectedRes;
     string s;
     ifstream fileStream(expectedFile);
@@ -120,8 +150,8 @@ bool FindPath::checkResult (string expectedFile) {
         s.erase(remove(s.begin(), s.end(), '\r'), s.end());
         expectedRes.insert(s);
     }
-    if (expectedRes == result) return true;
-    else return false;
+    if (expectedRes == result) cout << "Correct result" << endl;
+    else cout << "Wrong result" << endl;
 }
 
 // FindPath::~FindPath() {

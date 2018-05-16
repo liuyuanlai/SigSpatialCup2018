@@ -31,6 +31,8 @@ BuildGraph::BuildGraph(string file) {
     }
     cout << "Add vertices completed..." << endl;
 
+    //vecEdge.push_back(Edge(descIndexVertices[4], descIndexVertices[15])); //add extra edge to test 
+
     for(int i = 0; i < vecEdge.size(); i++)
   	{
     	//boost::add_edge(strIndexVertices[get<0>(vecEdge[i])], strIndexVertices[get<1>(vecEdge[i])], EdgeProperty(get<2>(vecEdge[i])), g);
@@ -48,8 +50,11 @@ UndirectedGraph BuildGraph::getGraph () {
 }
 
 void BuildGraph::printEdge() {
-	boost::graph_traits<UndirectedGraph>::edge_iterator ei, ei_end;
-    for (tie(ei, ei_end) = edges(g); ei != ei_end; ++ei)
-        std::cout << "(" << source(*ei, g)<< "," << target(*ei, g) << ") ";
-    std::cout << std::endl;
+	// boost::graph_traits<UndirectedGraph>::edge_iterator ei, ei_end;
+ //    for (tie(ei, ei_end) = edges(g); ei != ei_end; ++ei)
+ //        cout << "(" << source(*ei, g)<< "," << target(*ei, g) << ") ";
+ //    cout << endl;
+	for (int i = 0; i < vecEdge.size(); i++) {
+		cout << "edge" << i << ": " << "(" << strIndexVertices[vecEdge[i].first] << "," << strIndexVertices[vecEdge[i].second] << ") " << endl;
+	}
 }

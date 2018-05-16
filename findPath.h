@@ -16,11 +16,8 @@ using namespace std;
 
 class FindPath {
 	private:
-		
-        // typedef typename boost::property_map<UndirectedGraph, boost::edge_name_t>::type typev;
-
         //boost::property_map<UndirectedGraph, boost::vertex_name_t>::type Vname;
-        boost::property_map<UndirectedGraph, boost::edge_index_t>::type Ename;
+        EdgeIndexMap Ename;
         //IndexMap index;
         UndirectedGraph g;
         boost::ptr_vector<AllEdgePath> pathStore;

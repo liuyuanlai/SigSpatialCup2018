@@ -11,11 +11,11 @@ using namespace std;
 
 int main() {
 
-    string filepath = "SampleDataset1/SampleDataset1.json";
-    string outputpath = "SampleDataset1/output.txt";
+    // string filepath = "SampleDataset1/SampleDataset1.json";
+    // string outputpath = "SampleDataset1/output.txt";
 
-    // string filepath = "EsriNapervilleElectricNetwork/EsriNapervilleElectricNetwork.json";
-    // string outputpath = "EsriNapervilleElectricNetwork/output.txt";
+    string filepath = "EsriNapervilleElectricNetwork/EsriNapervilleElectricNetwork.json";
+    string outputpath = "EsriNapervilleElectricNetwork/output.txt";
 
     clock_t start_t, end_t; 
     start_t = clock();
@@ -30,11 +30,11 @@ int main() {
 
     UndirectedGraph g = buildGraph.g;
 
-    string startstr = "{7FC28536-6F4A-4A9A-B439-1D87AE2D8871}";
-    string endstr = "{5F396092-90DD-4E07-8C7D-2FB8480771C1}";
+    // string startstr = "{7FC28536-6F4A-4A9A-B439-1D87AE2D8871}";
+    // string endstr = "{5F396092-90DD-4E07-8C7D-2FB8480771C1}";
 
-    // string startstr = "{42236F76-4CEE-449E-82E7-94F96ABB88C4}";
-    // string endstr = "{1CAF7740-0BF4-4113-8DB2-654E18800028}";
+    string startstr = "{42236F76-4CEE-449E-82E7-94F96ABB88C4}";
+    string endstr = "{1CAF7740-0BF4-4113-8DB2-654E18800028}";
 
     Vertex start = buildGraph.strIndexVertices[startstr];
     Vertex end = buildGraph.strIndexVertices[endstr];
@@ -43,8 +43,8 @@ int main() {
 
     start_t = clock();
 
-    //path.pathFindNoDup(start, end); //call non-duplicate pathfind algorithm
-    path.pathFindDup(start, end); //call duplicate pathfind algorithm
+    path.pathFindNoDup(start, end); //call non-duplicate pathfind algorithm
+    // path.pathFindDup(start, end); //call duplicate pathfind algorithm
 
     end_t = clock();
     cout << "Find path takes: " << (double) (end_t-start_t)/CLOCKS_PER_SEC <<  "s" << endl;

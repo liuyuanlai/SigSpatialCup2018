@@ -2,7 +2,7 @@
 
 using namespace std;
 
-FindPath::FindPath (UndirectedGraph g, boost::ptr_vector<AllEdgePath> pathStore, vector<string> vecStrEdge, vector<string> vecVertices, desc2strMap descIndexVertices) {
+FindPath::FindPath (UndirectedGraph g, boost::ptr_vector<AllEdgePath> pathStore, vector<string> vecStrEdge, vector<string> vecVertices, Desc2StrMap descIndexVertices) {
     
     this->g = g;
     this->pathStore = pathStore;

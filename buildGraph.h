@@ -7,6 +7,7 @@
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/unordered_map.hpp>
 
 #include "typedef.h"
 
@@ -19,8 +20,8 @@ class BuildGraph {
 		vector<string> vecStrEdge;
 		vector<string> vecVertices;
 		unordered_set<string> setVertices;
-		map<string, UndirectedGraph::vertex_descriptor> strIndexVertices;
-		map<UndirectedGraph::vertex_descriptor, string> descIndexVertices;
+		Str2DescMap strIndexVertices;
+		Desc2StrMap descIndexVertices;
 		//vector<map<int, string>> pathStore;
 		boost::ptr_vector<AllEdgePath> pathStore;
 		int numVertices;

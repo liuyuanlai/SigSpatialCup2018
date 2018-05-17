@@ -2,7 +2,7 @@
 
 using namespace std;
 
-FindPath::FindPath (UndirectedGraph g, boost::ptr_vector<AllEdgePath> pathStore, vector<string> vecStrEdge, vector<string> vecVertices, desc2strMap descIndexVertices, Vertex start, Vertex end) {
+FindPath::FindPath (UndirectedGraph g, boost::ptr_vector<AllEdgePath> pathStore, vector<string> vecStrEdge, vector<string> vecVertices, desc2strMap descIndexVertices) {
     
     this->g = g;
     this->pathStore = pathStore;
@@ -11,13 +11,13 @@ FindPath::FindPath (UndirectedGraph g, boost::ptr_vector<AllEdgePath> pathStore,
     this->vecVertices = vecVertices;
     this->Ename = get(boost::edge_index, g);
     //index = get(boost::vertex_index, g);
-    this->start = start;
-    this->end = end;
 }
 
-void FindPath::pathFindDup() {
+void FindPath::pathFindDup(Vertex start, Vertex end) {
+    this->start = start;
+    this->end = end;
     unordered_set<Vertex> visitedNode;
-    this->pathFindingDup(start, to_string(start), "", visitedNode);
+    this->pathFindingDup(this->start, to_string(this->start), "", visitedNode);
     string in_path;
     //unordered_set<string> result;
     for (size_t k = 0; k < vertexRes.size(); k++){
@@ -46,9 +46,11 @@ void FindPath::pathFindDup() {
     }
 }
 
-void FindPath::pathFindNoDup() {
+void FindPath::pathFindNoDup(Vertex start, Vertex end) {
+    this->start = start;
+    this->end = end;
     unordered_set<Vertex> visitedNode;
-    VertexEdgePath tmpVertexEdgePath = this->pathFindingNoDup(start, visitedNode);
+    VertexEdgePath tmpVertexEdgePath = this->pathFindingNoDup(this->start, visitedNode);
 
     // for (int v = 0; v < vecVertices.size(); v++) {
     //     typename GraphTraits::out_edge_iterator out_i, out_end;

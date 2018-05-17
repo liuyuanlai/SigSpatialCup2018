@@ -5,7 +5,7 @@ using namespace std;
 
 // typedef boost::property<boost::vertex_name_t, std::string> VertexProperty;
 // typedef boost::property<boost::edge_name_t, std::string> EdgeProperty;
-typedef boost::property<boost::edge_index_t, std::size_t> EdgeProperty;
+typedef boost::property<boost::edge_index_t, size_t> EdgeProperty;
 // typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VertexProperty, EdgeProperty> UndirectedGraph;
 typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, EdgeProperty> UndirectedGraph;
 typedef typename boost::graph_traits<UndirectedGraph>::vertex_descriptor Vertex;

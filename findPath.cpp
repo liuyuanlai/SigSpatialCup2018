@@ -1,5 +1,5 @@
 #include "findPath.h"
-
+#include <stack>
 using namespace std;
 
 FindPath::FindPath (UndirectedGraph g, boost::ptr_vector<AllEdgePath> pathStore, vector<string> vecStrEdge, vector<string> vecVertices, Desc2StrMap descIndexVertices) {
@@ -50,7 +50,7 @@ void FindPath::pathFindNoDup(Vertex start, Vertex end) {
     this->start = start;
     this->end = end;
     unordered_set<Vertex> visitedNode;
-    VertexEdgePath tmpVertexEdgePath = this->pathFindingNoDup(this->start, visitedNode);
+    VertexEdgePath tmpVertexEdgePath = this->pathFindingNoDupIterative(this->start, visitedNode);
 
     // for (int v = 0; v < vecVertices.size(); v++) {
     //     typename GraphTraits::out_edge_iterator out_i, out_end;
@@ -106,6 +106,82 @@ void FindPath::pathFindingDup (Vertex start, string currentVertexPath, string cu
     }
 }
 
+VertexEdgePath FindPath::pathFindingNoDupIterative(Vertex start, unordered_set<Vertex> visitedNode){
+    typename GraphTraits::out_edge_iterator out_i, out_end;
+    typename GraphTraits::edge_descriptor e;
+    unordered_set<Vertex> analyzedNode;
+    stack<Vertex> node;
+    tempPath path;
+    Vertex cur = start;
+    Vertex tem;
+    bool next = false;
+    node.push(cur);
+    while(!node.empty()){
+        while(true){
+            next = false;
+            if(analyzedNode.find(cur) != analyzedNode.end()) break;
+            visitedNode.insert(cur);
+            analyzedNode.insert(cur);
+            tie(out_i, out_end) = out_edges(cur, g);
+            while(out_i != out_end){
+                e = *out_i;
+                Vertex targ = target(e, g);
+                if (visitedNode.find(targ) != visitedNode.end()) {out_i++;continue;}
+                if(next == false) {tem = targ; next = true;}
+                else {
+                    node.push(targ);
+                    visitedNode.insert(targ);
+                }
+                out_i++;
+            }
+            node.push(cur);
+            cur = tem;
+            if(cur == end) {node.push(cur); visitedNode.insert(cur); analyzedNode.insert(cur); break;}
+        }
+         
+        cur = node.top();
+        node.pop();
+        bool isEnd = true;
+        tie(out_i, out_end) = out_edges(cur, g);
+        int count = 0;
+        while(!node.empty() && out_i != out_end){
+            e = *out_i;
+            Vertex targ = target(e, g);
+            if(node.top() == targ && analyzedNode.find(targ) == analyzedNode.end()){
+                Vertex tem = node.top();
+                node.pop();
+                node.push(cur);
+                cur = tem;
+                isEnd = false;
+                break;
+            }
+            out_i++;
+            count++;
+        }
+    
+        if(isEnd){
+            if(cur == end) {path[cur] = VertexEdgePath(to_string(cur) + ">", ""); continue;}
+            string tempVertexPath = "", tempEdgePath = "";
+            tie(out_i, out_end) = out_edges(cur, g);
+            while(out_i != out_end){
+                e = *out_i;
+                Vertex targ = target(e, g);
+                if (path.find(targ) != path.end()) {
+                    if (path[targ].first != "dead") {
+                        tempVertexPath += to_string(cur) + ">" + path[targ].first;
+                        path[targ].second = to_string(Ename[e]) + ">" + path[targ].second;
+                        tempEdgePath += path[targ].second;
+                    }            
+                }
+                out_i++;
+            }
+            if (tempVertexPath == "") {path[cur] = VertexEdgePath("dead", "dead");}
+            else path[cur] = VertexEdgePath(tempVertexPath, tempEdgePath);
+        }
+    }
+    return path[start];
+}
+
 VertexEdgePath FindPath::pathFindingNoDup (Vertex start, unordered_set<Vertex> visitedNode) {
     typename GraphTraits::out_edge_iterator out_i, out_end;
     typename GraphTraits::edge_descriptor e;
@@ -152,6 +228,7 @@ void FindPath::checkResult (string expectedFile) {
         s.erase(remove(s.begin(), s.end(), '\r'), s.end());
         expectedRes.insert(s);
     }
+    for(const auto& elem: result) cout << elem << endl;
     if (expectedRes == result) cout << "Result check passed..." << endl;
     else cout << "Result check didn't pass..." << endl;
 }

@@ -39,5 +39,6 @@ class FindPath {
         void pathFindNoDup(Vertex start, Vertex end);
         void pathFindingDup(Vertex start, string currentVertexPath, string currentEdgePath, unordered_set<Vertex> visitedNode);
         VertexEdgePath pathFindingNoDup(Vertex start, unordered_set<Vertex> visitedNode);
+        VertexEdgePath pathFindingNoDupIterative(Vertex start, unordered_set<Vertex> visitedNode);
 
 };

@@ -18,5 +18,5 @@ typedef boost::unordered::unordered_map<string, UndirectedGraph::vertex_descript
 typedef pair<string, string> Edge;
 typedef pair<string, string> VertexEdgePath;
 typedef boost::unordered::unordered_map<int, VertexEdgePath> AllEdgePath;
-
+typedef boost::unordered::unordered_map<Vertex, VertexEdgePath> tempPath;
 #endif

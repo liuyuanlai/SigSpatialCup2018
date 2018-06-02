@@ -51,7 +51,7 @@ void FindPath::pathFindNoDup(Vertex start, Vertex end) {
     this->end = end;
     unordered_set<Vertex> visitedNode;
     VertexEdgePath tmpVertexEdgePath = this->pathFindingNoDupIterative(this->start, visitedNode);
-
+    //VertexEdgePath tmpVertexEdgePath = this->pathFindingNoDup(this->start, visitedNode);
     // for (int v = 0; v < vecVertices.size(); v++) {
     //     typename GraphTraits::out_edge_iterator out_i, out_end;
     //     typename GraphTraits::edge_descriptor e;
@@ -115,9 +115,11 @@ VertexEdgePath FindPath::pathFindingNoDupIterative(Vertex start, unordered_set<V
     Vertex cur = start;
     Vertex tem;
     bool next = false;
-    node.push(cur);
-    while(!node.empty()){
+    bool begin = true;
+    while(!node.empty() || begin == true){
+        begin = false;
         while(true){
+            //cout << "analysis node: " << cur << endl;
             next = false;
             if(analyzedNode.find(cur) != analyzedNode.end()) break;
             visitedNode.insert(cur);
@@ -126,59 +128,67 @@ VertexEdgePath FindPath::pathFindingNoDupIterative(Vertex start, unordered_set<V
             while(out_i != out_end){
                 e = *out_i;
                 Vertex targ = target(e, g);
-                if (visitedNode.find(targ) != visitedNode.end()) {out_i++;continue;}
+                if (visitedNode.find(targ) != visitedNode.end() || pathStore[cur][targ].first != "null") {out_i++;continue;}
                 if(next == false) {tem = targ; next = true;}
                 else {
                     node.push(targ);
-                    visitedNode.insert(targ);
+                    //cout << "push neighbor" << targ << endl;
                 }
                 out_i++;
             }
             node.push(cur);
+            //cout << "push node" << cur << endl;
+            if(!next) break;
             cur = tem;
             if(cur == end) {node.push(cur); visitedNode.insert(cur); analyzedNode.insert(cur); break;}
         }
          
         cur = node.top();
         node.pop();
+        //cout << "pop " << cur << endl;
         bool isEnd = true;
         tie(out_i, out_end) = out_edges(cur, g);
-        int count = 0;
         while(!node.empty() && out_i != out_end){
             e = *out_i;
             Vertex targ = target(e, g);
             if(node.top() == targ && analyzedNode.find(targ) == analyzedNode.end()){
-                Vertex tem = node.top();
+                Vertex tem1 = node.top();
                 node.pop();
+                //cout << "pop" << tem1 << endl;
                 node.push(cur);
-                cur = tem;
+                //cout << "push back" << cur << endl;
+                cur = tem1;
                 isEnd = false;
                 break;
             }
             out_i++;
-            count++;
         }
     
         if(isEnd){
-            if(cur == end) {path[cur] = VertexEdgePath(to_string(cur) + ">", ""); continue;}
+            //cout << "store path of : " << cur << endl;
+            if(cur == end) {path[cur] = VertexEdgePath(to_string(cur) + ">", ""); Vertex temp = node.top(); pathStore[temp][cur].first = path[cur].first; pathStore[temp][cur].second = path[cur].second; cur = node.top(); continue;}
             string tempVertexPath = "", tempEdgePath = "";
             tie(out_i, out_end) = out_edges(cur, g);
             while(out_i != out_end){
                 e = *out_i;
                 Vertex targ = target(e, g);
-                if (path.find(targ) != path.end()) {
-                    if (path[targ].first != "dead") {
-                        tempVertexPath += to_string(cur) + ">" + path[targ].first;
-                        path[targ].second = to_string(Ename[e]) + ">" + path[targ].second;
-                        tempEdgePath += path[targ].second;
-                    }            
+                if (pathStore[cur][targ].first != "null" && (node.empty() || node.top() != targ)) {
+                    if (pathStore[cur][targ].first != "dead") {
+                        tempVertexPath += to_string(cur) + ">" + pathStore[cur][targ].first;
+                        tempEdgePath += to_string(Ename[e]) + ">" + pathStore[cur][targ].second;
+                        //cout << cur << "to " << targ << "is " << pathStore[cur][targ].first;
+                    }    
                 }
                 out_i++;
             }
+            visitedNode.erase(cur); analyzedNode.erase(cur);
             if (tempVertexPath == "") {path[cur] = VertexEdgePath("dead", "dead");}
             else path[cur] = VertexEdgePath(tempVertexPath, tempEdgePath);
+            cout << cur << "path is : " << path[cur].first << endl;
+            if(!node.empty()) {Vertex temp = node.top(); pathStore[temp][cur].first = path[cur].first; pathStore[temp][cur].second = path[cur].second; cur = node.top();}
         }
     }
+    cout << "Path is : " << path[start].first << endl;
     return path[start];
 }
 

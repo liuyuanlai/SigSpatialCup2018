@@ -14,6 +14,10 @@ BuildGraph::BuildGraph(string file) {
 		setVertices.insert(row.second.get<string>("fromGlobalId"));
 		setVertices.insert(row.second.get<string>("toGlobalId"));
 	}
+
+	for (pt::ptree::value_type &controller : root.get_child("controllers")) {
+		controllers.push_back(controller.second.get<string>("globalId"));
+	}
 	cout << "Parse file completed..." << endl;
 
 	numVertices = setVertices.size();

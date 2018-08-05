@@ -24,6 +24,7 @@ class BuildGraph {
 		Desc2StrMap descIndexVertices;
 		//vector<map<int, string>> pathStore;
 		boost::ptr_vector<AllEdgePath> pathStore;
+		vector<string> controllers;
 		int numVertices;
 
 	public:

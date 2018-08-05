@@ -184,11 +184,11 @@ VertexEdgePath FindPath::pathFindingNoDupIterative(Vertex start, unordered_set<V
             visitedNode.erase(cur); analyzedNode.erase(cur);
             if (tempVertexPath == "") {path[cur] = VertexEdgePath("dead", "dead");}
             else path[cur] = VertexEdgePath(tempVertexPath, tempEdgePath);
-            cout << cur << "path is : " << path[cur].first << endl;
+            //cout << cur << "path is : " << path[cur].first << endl;
             if(!node.empty()) {Vertex temp = node.top(); pathStore[temp][cur].first = path[cur].first; pathStore[temp][cur].second = path[cur].second; cur = node.top();}
         }
     }
-    cout << "Path is : " << path[start].first << endl;
+    //cout << "Path is : " << path[start].first << endl;
     return path[start];
 }
 
@@ -238,7 +238,7 @@ void FindPath::checkResult (string expectedFile) {
         s.erase(remove(s.begin(), s.end(), '\r'), s.end());
         expectedRes.insert(s);
     }
-    for(const auto& elem: result) cout << elem << endl;
+    //for(const auto& elem: result) cout << elem << endl;
     if (expectedRes == result) cout << "Result check passed..." << endl;
     else cout << "Result check didn't pass..." << endl;
 }
